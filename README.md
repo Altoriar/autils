@@ -62,13 +62,22 @@
 
 # 字符串操作（中高频）
 1. camelCase: 字符串转驼峰命名（如 camelCase('hello-world') → 'helloWorld'）
-2. kebabCase: 字符串转连字符命名（如 kebabCase('helloWorld') → 'hello-world'）
-3. snakeCase: 字符串转下划线命名（如 snakeCase('helloWorld') → 'hello_world'）
-4. trim: 移除字符串首尾空格（封装原生，兼容低版本）
-5. padStart: 字符串开头补全（封装原生，如 padStart('123', 5, '0') → '00123'）
-6. padEnd: 字符串结尾补全
-7. startWith: 判断字符串是否以指定字符开头
-8. endWith: 判断字符串是否以指定字符结尾
+2. caplitalize: 字符串首字母大写（如 hello -> Hello）
+3. capitalizeWords: 句子单词首字母大写（如 hello word -> Hello Word）
+4. countChars: 统计字符串中每个字母出现的次数
+5. maxCountChar: 统计字符串中出现最多的字母和次数
+6. kebabCase: 字符串转连字符命名（如 kebabCase('helloWorld') → 'hello-world'）
+7. snakeCase: 字符串转下划线命名（如 snakeCase('helloWorld') → 'hello_world'）
+8. trim: 移除字符串首尾空格（封装原生，兼容低版本）
+9. padStart: 字符串开头补全（封装原生，如 padStart('123', 5, '0') → '00123'）
+10. padEnd: 字符串结尾补全
+11. startWith: 判断字符串是否以指定字符开头
+12. endWith: 判断字符串是否以指定字符结尾
+13. isAnagram: 判断字符串是否是字母同异位
+14. plindrome: 判断字符串是否是回文
+15. reverseStr: 反转字符串
+16. truncate: 字符串截取，超出部分展示成 ...
+17. parseUrlParams: 将 url 中的路由参数转换为对象（如 http://xxx.com?a=1&b=2 -> {a: '1', b: '2'}）
 
 # 工具类（中低频）
 1. random: 生成指定范围的随机数（如 random(1, 10) → 5）

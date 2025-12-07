@@ -10,7 +10,7 @@ export function trim(str: string): string {
 	}
 
 	// 优先使用原生 trim（现代浏览器/高版本 JS 环境）
-	if (String.prototype.trim) {
+	if (typeof String.prototype.trim === 'function') {
 		return str.trim();
 	}
 

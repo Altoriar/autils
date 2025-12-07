@@ -51,24 +51,22 @@ import { values } from './object/values';
 
 /* String */
 import { camelCase } from './string/camelCase';
+import { capitalize } from './string/capitalize';
+import { capitalizeWords } from './string/capitalizeWords';
+import { countChars } from './string/countChars';
 import { endWith } from './string/endWith';
+import { isAnagram } from './string/isAnagram';
 import { kebabCase } from './string/kebabCase';
+import { maxCountChar } from './string/maxCountChar';
 import { padEnd } from './string/padEnd';
 import { padStart } from './string/padStart';
+import { parseUrlParams } from './string/parseUrlParams';
+import { plindrome } from './string/plindrome';
+import { reverseStr } from './string/reverseStr';
 import { snakeCase } from './string/snakeCase';
 import { startWith } from './string/startWith';
-import {
-	reverseStr,
-	palindrome,
-	truncate,
-	capitalize,
-	capitalizeWords,
-	countChars,
-	maxCountChars,
-	kebabToCamel,
-	camelToKebab,
-	parseUrlParams,
-} from './string';
+import { trim } from './string/trim';
+import { truncate } from './string/truncate';
 
 /* Tools */
 import { delay } from './tools/delay';
@@ -158,17 +156,16 @@ export {
 	padStart,
 	snakeCase,
 	startWith,
-	// ------
 	reverseStr,
-	palindrome,
-	truncate,
 	capitalize,
 	capitalizeWords,
 	countChars,
-	maxCountChars,
-	kebabToCamel,
-	camelToKebab,
 	parseUrlParams,
+	trim,
+	truncate,
+	isAnagram,
+	maxCountChar,
+	plindrome,
 };
 
 /* Tools */
