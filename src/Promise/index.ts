@@ -4,7 +4,7 @@ type Excutor = () => void;
 
 type Status = 'pending' | 'resolved' | 'rejected';
 
-class MyPromise {
+export class MyPromise {
 	status: Status = 'pending';
 	data: any = undefined;
 	callbacks: { onResolved: Function; onRejected: Function }[] = []; // 结构 {onResolved() {}, onRejected() {}}
@@ -99,5 +99,3 @@ class MyPromise {
 		});
 	}
 }
-
-const promise = new MyPromise(() => {});

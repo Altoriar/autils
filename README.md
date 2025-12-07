@@ -1,3 +1,6 @@
+# 前端常用工具库源码实现
+本仓库主要用于学习，对前端开发中常用的工具函数进行了源码开发，部分复杂功能函数只实现了核心逻辑。
+
 # 基础判断类型（高频使用）
 基础工具，解决原生 JS 类型判断不准确问题
 
@@ -72,3 +75,48 @@
 2. range: 生成数字范围数组（如 range(1, 5) → [1,2,3,4]，支持步长）
 3. delay: 延迟执行函数（返回 Promise，如 delay(1000).then(()=>{})）
 4. uniqueId: 生成唯一 ID（如 uniqueId('prefix_') → 'prefix_123456'）
+
+# React Hooks
+实现原生 hook 核心逻辑和常用自定义 hook 逻辑封装
+
+1. useState
+2. useEffect
+3. useContext
+4. useRequest
+
+
+# 封装 Ajax
+1. ajax 
+
+# 懒加载
+1. lazyload
+
+# 自定义 Promise
+1. MyPromise
+
+# 发布订阅
+1. PubSub
+
+# 数据结构
+1. 队列 Queue
+2. 双端队列 Deque
+3. 优先级队列 PriorityQueue
+4. 栈 Stack
+5. 单向链表 LinkList
+6. 双向链表 DoublyLinkList
+7. 集合 Set
+8. 字典 Dictionary
+9. 哈希表 HashTable
+10. 二叉搜索树 BinarySearchTree
+11. 图 Graph
+
+# 算法
+1. 冒泡排序 bubbleSort
+2. 选择排序 selectionSort
+3. *插入排序 insertionSort
+4. 希尔排序 shellSort
+5. 归并排序 mergeSort
+6. *快速排序 quickSort
+7. 计数排序 countingSort
+8. 桶排序 bucketSort
+9. 二分查找 binarySearch
