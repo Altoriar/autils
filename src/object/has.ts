@@ -14,11 +14,10 @@ export function has<T>(target: T, path: string): boolean {
 		.split('.')
 		.filter(Boolean);
 
-	let result = target;
+	let result: any = target;
 
 	keys.forEach((key) => {
-		// FIXME：类型问题
-		result = result[key as unknown as keyof T];
+		result = result[key];
 	});
 
 	return !!result;

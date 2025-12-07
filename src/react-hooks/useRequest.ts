@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 interface RequestConfig extends Request {
 	method: 'get' | 'post' | 'put' | 'delete';
 	url: string;
@@ -6,17 +8,17 @@ interface RequestConfig extends Request {
 }
 
 export function useRequest(config: RequestConfig) {
-	const [loading, setLoading] = useState();
-	const [error, setError] = useState();
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState('');
 	const [data, setData] = useState();
 
 	const fetchData = async () => {
 		setLoading(true);
 		try {
 			const res = await fetch(config);
-			setData(res);
+			setData(res as unknown as any);
 		} catch (e) {
-			setError(e);
+			setError(e as string);
 		} finally {
 			setLoading(false);
 		}

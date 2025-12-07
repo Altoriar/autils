@@ -12,7 +12,7 @@ export function useState<T>(initialValue: T) {
 
 	const setState = (newValue: T) => {
 		hooks[currentIndex] = newValue;
-		render(); // 触发组件的重新执行，（模拟 React 更新过程）
+		// render(); // 触发组件的重新执行，（模拟 React 更新过程）
 	};
 
 	hookIndex++;

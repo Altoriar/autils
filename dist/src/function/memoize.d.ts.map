@@ -1,0 +1,1 @@
+{"version":3,"file":"memoize.d.ts","sourceRoot":"","sources":["../../../src/function/memoize.ts"],"names":[],"mappings":"AAAA;;;;;;GAMG;AAEH,wBAAgB,OAAO,CAAC,CAAC,SAAS,CAAC,GAAG,IAAI,EAAE,GAAG,EAAE,KAAK,GAAG,EACxD,EAAE,EAAE,CAAC,EACL,iBAAiB,CAAC,EAAE,CAAC,GAAG,EAAE,UAAU,CAAC,CAAC,CAAC,KAAK,MAAM;cAId,UAAU,CAAC,CAAC,CAAC,GAAG,UAAU,CAAC,CAAC,CAAC;;EAmBjE"}

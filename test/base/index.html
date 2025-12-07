@@ -5,5 +5,41 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Document</title>
 	</head>
-	<body></body>
+	<body>
+		<script src="../../dist/index.js"></script>
+
+		<script>
+			const arr = [1, 2];
+			console.log('🚀 ~ arr:', autils.isArray(arr));
+
+			const bool = true;
+			console.log('🚀 ~ bool:', autils.isBoolean(bool));
+
+			const str = 'abc';
+			console.log('🚀 ~ str:', autils.isString(str));
+
+			const obj = { a: 1, b: 2 };
+			console.log('🚀 ~ obj:', autils.isObject(obj));
+
+			const num = 1;
+			console.log('🚀 ~ num:', autils.isNumber(num));
+
+			const nullValue = null;
+			console.log('🚀 ~ nullValue:', autils.isNull(nullValue));
+
+			const undefinedValue = undefined;
+			console.log(
+				'🚀 ~ undefinedValue:',
+				autils.isUndefined(undefinedValue)
+			);
+
+			const fn = (a, b) => {
+				return a + b;
+			};
+			console.log('🚀 ~ fn ~ fn:', autils.isFunction(fn));
+
+			const data = 22;
+			console.log('🚀 ~ data:', autils.isEmpty(data));
+		</script>
+	</body>
 </html>

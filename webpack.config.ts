@@ -13,22 +13,27 @@ const config: Configuration = {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'index.js',
 		library: {
-			name: 'tools',
+			name: 'autils',
 			type: 'umd',
 		},
 		clean: true,
 	},
 	resolve: {
-		extensions: ['.ts', '.js'],
+		extensions: ['.ts', '.js', '.tsx'],
 	},
 	module: {
 		rules: [
 			{
-				test: /\.ts$/,
+				test: /\.(ts|tsx)$/,
 				use: 'ts-loader',
 				exclude: /node_modules/,
 			},
 		],
+	},
+
+	externals: {
+		react: 'react',
+		'react-dom': 'react-dom',
 	},
 
 	devtool: 'source-map',

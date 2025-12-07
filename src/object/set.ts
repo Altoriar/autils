@@ -4,7 +4,7 @@ export function set<T, U>(target: T, path: string, value: U): T {
 		.split('.')
 		.filter(Boolean);
 
-	let reuslt = target;
+	let reuslt: any = target;
 	let isLastIndex = keys.length - 1;
 
 	for (let i = 0; i < keys.length; i++) {

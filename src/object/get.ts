@@ -18,10 +18,9 @@ export function get<T, U>(
 		?.split('.')
 		.filter(Boolean);
 
-	let result = target;
+	let result: any = target;
 
 	keys?.forEach((key) => {
-		// FIXME: 类型问题
 		result = result[key];
 	});
 
