@@ -88,6 +88,9 @@ import { ajax } from './ajax';
 /* 页面倒计时 */
 
 /* 数据结构 & 算法 */
+import { Queue } from './da/Queue';
+import { Stack } from './da/Stack';
+import { LinkedList } from './da/LinkedList';
 
 /* Promise */
 import { MyPromise } from './Promise';
@@ -179,6 +182,7 @@ export { useState, useEffect, createContext, useRequest };
 /* 页面倒计时 */
 
 /* 数据结构 & 算法 */
+export { Queue, Stack, LinkedList };
 
 /* Promise */
 export { MyPromise };

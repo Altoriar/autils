@@ -14,9 +14,9 @@
     // 测试1：基础场景（单参数分批传参）
         const add = (a: number, b: number, c: number) => a + b + c;
         const curriedAdd = curry(add);
-        console.log(curriedAdd(1)(2)(3)); // 6 ✅
-        console.log(curriedAdd(1, 2)(3)); // 6 ✅（分批传多个参数）
-        console.log(curriedAdd(1)(2, 3)); // 6 ✅
+        console.log(curriedAdd(1)(2)(3)); // 6 
+        console.log(curriedAdd(1, 2)(3)); // 6 （分批传多个参数）
+        console.log(curriedAdd(1)(2, 3)); // 6 
 
         // 测试2：绑定 this 场景（保留 this 指向）
         const obj = {
@@ -27,16 +27,16 @@
         };
         const curriedAddBase = curry(obj.addBase);
         const boundAddBase = curriedAddBase.bind(obj);
-        console.log(boundAddBase(5)(6)); // 10+5+6=21 ✅
+        console.log(boundAddBase(5)(6)); // 10+5+6=21 
 
         // 测试3：无参数/单参数函数
         const noArgFn = () => "hello";
         const curriedNoArg = curry(noArgFn);
-        console.log(curriedNoArg()); // hello ✅
+        console.log(curriedNoArg()); // hello 
 
         const singleArgFn = (a: string) => a.toUpperCase();
         const curriedSingle = curry(singleArgFn);
-        console.log(curriedSingle("test")); // TEST ✅
+        console.log(curriedSingle("test")); // TEST 
  */
 export function curry<T extends (...args: any[]) => any>(fn: T) {
 	// 获取原函数的形参个数（基于 Function.length）
@@ -44,7 +44,7 @@ export function curry<T extends (...args: any[]) => any>(fn: T) {
 
 	// 递归接收参数的核心函数
 	const curried = function collected(this: any, ...args: any[]) {
-		// 场景1：已传入的参数个数 ≥ 原函数形参个数 → 执行原函数
+		// 场景1：已传入的参数个数 ≥ 原函数形参个数 -> 执行原函数
 		if (args.length >= fnArgLength) {
 			return fn.apply(this, args);
 		}

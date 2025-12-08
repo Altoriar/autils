@@ -86,7 +86,7 @@
 4. uniqueId: 生成唯一 ID（如 uniqueId('prefix_') → 'prefix_123456'）
 
 # React Hooks
-实现原生 hook 核心逻辑和常用自定义 hook 逻辑封装
+仅现原生 hook 核心逻辑和常用自定义 hook 逻辑封装
 
 1. useState
 2. useEffect
@@ -106,7 +106,7 @@
 # 发布订阅
 1. PubSub
 
-# 数据结构
+# 数据结构（队列、栈、链表已实现，其它复杂结构暂未实现）
 1. 队列 Queue
 2. 双端队列 Deque
 3. 优先级队列 PriorityQueue
@@ -119,7 +119,7 @@
 10. 二叉搜索树 BinarySearchTree
 11. 图 Graph
 
-# 算法
+# 算法（暂未实现）
 1. 冒泡排序 bubbleSort
 2. 选择排序 selectionSort
 3. *插入排序 insertionSort
