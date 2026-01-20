@@ -73,6 +73,8 @@ import { delay } from './tools/delay';
 import { random } from './tools/random';
 import { range } from './tools/range';
 import { uniqueId } from './tools/uniqueId';
+import { sleep } from './tools/sleep';
+import { storage } from './tools/storage';
 
 /* React Hooks */
 import { useState } from './react-hooks/useState';
@@ -172,7 +174,7 @@ export {
 };
 
 /* Tools */
-export { delay, random, range, uniqueId };
+export { delay, random, range, uniqueId, sleep, storage };
 
 /* React Hooks */
 export { useState, useEffect, createContext, useRequest };

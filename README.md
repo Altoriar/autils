@@ -50,6 +50,7 @@
 10. omit: 移除对象的指定属性（返回新对象，如 omit(obj, ['a', 'b'])）
 11. pick: 提取对象的指定属性（返回新对象，如 pick(obj, ['a', 'b'])）
 12. isEmpty: 判断对象是否为空（无自有可枚举属性）
+13. deepMerge: 合并对象，如 deepMerge({a: 1, b: 2}, {b: 3}) -> {a: 1, b: 3}
 
 # 函数增强
 解决函数防抖、节流、柯理化等常见需求
@@ -84,14 +85,23 @@
 2. range: 生成数字范围数组（如 range(1, 5) → [1,2,3,4]，支持步长）
 3. delay: 延迟执行函数（返回 Promise，如 delay(1000).then(()=>{})）
 4. uniqueId: 生成唯一 ID（如 uniqueId('prefix_') → 'prefix_123456'）
+5. sleep: 睡眠函数，等待指定时间后执行，(ms: number) => Promise<void>
+6. storage: localStorage 系列操作封装，简化使用
 
 # React Hooks
 仅现原生 hook 核心逻辑和常用自定义 hook 逻辑封装
 
-1. useState
-2. useEffect
-3. useContext
+1. useState: 仅实现核心部分（学习、理解源码）
+2. useEffect: 仅实现核心部分（学习、理解源码）
+3. useContext: 仅实现核心部分（学习、理解源码）
 4. useRequest
+5. useDebounce: 值防抖
+6. useThrottle: 值节流
+
+# React Components
+1. <Modal></Modal>
+2. <Toast></Toast>
+3. <Button></Button>
 
 
 # 封装 Ajax
