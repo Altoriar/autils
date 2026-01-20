@@ -6,8 +6,8 @@
  */
 export function flatten<T>(arr: T[], depth = Infinity): T[] {
 	return arr.reduce<T[]>((pre, next) => {
-		if (Array.isArray(next)) {
-			pre.push(...flatten(next));
+		if (Array.isArray(next) && depth > 0) {
+			pre.push(...flatten(next, depth - 1));
 		} else {
 			pre.push(next);
 		}
@@ -15,3 +15,5 @@ export function flatten<T>(arr: T[], depth = Infinity): T[] {
 		return pre;
 	}, []);
 }
+
+

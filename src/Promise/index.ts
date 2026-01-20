@@ -1,62 +1,119 @@
-import { AnyNaptrRecord } from 'dns';
+type Resolve<T> = (value: T) => void;
+type Reject<U> = (reason: U) => void;
 
-type Excutor = () => void;
+type Executor<T, U> = (resolve: Resolve<T>, reject: Reject<U>) => void;
 
 type Status = 'pending' | 'resolved' | 'rejected';
 
-export class MyPromise {
+export class MyPromise<T, U> {
 	status: Status = 'pending';
-	data: any = undefined;
-	callbacks: { onResolved: Function; onRejected: Function }[] = []; // 结构 {onResolved() {}, onRejected() {}}
+	data: T | U | undefined = undefined;
+	callbacks: { onResolved: Resolve<T>; onRejected: Reject<U> }[] = []; // 结构 {onResolved() {}, onRejected() {}}
 
-	constructor(excutor: Function) {
-		const self = this;
-		self.status = 'pending';
-		self.data = undefined;
-		self.callbacks = [];
+	constructor(executor: Executor<T, U>) {
+		this.status = 'pending';
+		this.data = undefined;
+		this.callbacks = [];
 
-		function resolve(value: AnyNaptrRecord) {
-			if (self.status !== 'pending') return;
+		const resolve = (value: T) => {
+			if (this.status !== 'pending') return;
 
-			self.status = 'resolved';
-			self.data = value;
-			if (self.callbacks.length > 0) {
+			this.status = 'resolved';
+			this.data = value;
+			if (this.callbacks.length > 0) {
 				setTimeout(() => {
-					self.callbacks.forEach((cb) => {
+					this.callbacks.forEach((cb) => {
 						cb.onResolved(value);
 					});
 				});
 			}
-		}
+		};
 
-		function reject(reason: any) {
-			if (self.status !== 'pending') return;
+		const reject = (reason: U) => {
+			if (this.status !== 'pending') return;
 
-			self.status = 'rejected';
-			self.data = reason;
-			if (self.callbacks.length > 0) {
+			this.status = 'rejected';
+			this.data = reason;
+			if (this.callbacks.length > 0) {
 				setTimeout(() => {
-					self.callbacks.forEach((cb) => {
+					this.callbacks.forEach((cb) => {
 						cb.onRejected(reason);
 					});
 				});
 			}
-		}
+		};
 
 		try {
-			excutor(resolve, reject);
-		} catch (error) {
+			executor(resolve, reject);
+		} catch (error: any) {
 			reject(error);
 		}
 	}
 
-	then() {}
+	then(onResolved?: Function, onRejected?: Function) {
+		onResolved =
+			typeof onResolved === 'function' ? onResolved : (value: T) => value;
+		onRejected =
+			typeof onRejected === 'function'
+				? onRejected
+				: (reason: any) => {
+						throw reason;
+				  };
 
-	catch() {}
+		return new Promise((resolve, reject) => {
+			const handle = (callback: Function) => {
+				// 回调函数抛出异常样
+				try {
+					const result = callback(this.data);
+					// 如果回调函数返回的是 Promise，则改变 Promise 的状态，否则将值返回
+					if (result instanceof Promise) {
+						result.then(resolve, reject);
+					} else {
+						resolve(result);
+					}
+				} catch (error) {
+					reject(error);
+				}
+			};
 
-	static resolve() {}
+			if (this.status === 'pending') {
+				this.callbacks.push({
+					onResolved(value: T) {
+						handle(onResolved);
+					},
+					onRejected(value: T) {
+						handle(onRejected);
+					},
+				});
+			} else if (this.status === 'resolved') {
+				setTimeout(() => {
+					handle(onResolved);
+				});
+			} else {
+				setTimeout(() => {
+					handle(onRejected);
+				});
+			}
+		});
+	}
 
-	static reject() {}
+	catch(onRejected: Function) {
+		this.then(undefined, onRejected);
+	}
+
+	static resolve(value: any) {
+		return new Promise((resolve, reject) => {
+			if (value instanceof Promise) {
+				value.then(resolve, reject);
+			}
+		});
+	}
+
+	static reject(reason: any) {
+		return new Promise((resolve, reject) => {
+			reject(reason);
+		});
+	}
 
 	// Promise.all([fetch(), fetch()])
 	/* Promise函数对象all方法，接收promise数组，只有所有promise对象成功返回成功，否则返回失败 */

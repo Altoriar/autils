@@ -23,7 +23,7 @@ export function observe(el: HTMLElement, cb: Function) {
  * <img />
  */
 export function lazyload<T>(element: T | T[]) {
-	const imgs = document.querySelectorAll('img[data-src]');
+	const imgs = element || document.querySelectorAll('img[data-src]');
 
 	const observer = new IntersectionObserver((entries, obs) => {
 		entries.forEach((entry) => {
@@ -38,7 +38,7 @@ export function lazyload<T>(element: T | T[]) {
 		});
 	});
 
-	imgs?.forEach((img) => {
+	(imgs as NodeListOf<HTMLImageElement>)?.forEach((img) => {
 		observer.observe(img);
 	});
 }

@@ -42,7 +42,7 @@ export function curry<T extends (...args: any[]) => any>(fn: T) {
 	// 获取原函数的形参个数（基于 Function.length）
 	const fnArgLength = fn.length;
 
-	// 递归接收参数的核心函数
+	// 递归接收参数的核心函数·
 	const curried = function collected(this: any, ...args: any[]) {
 		// 场景1：已传入的参数个数 ≥ 原函数形参个数 -> 执行原函数
 		if (args.length >= fnArgLength) {
@@ -58,3 +58,4 @@ export function curry<T extends (...args: any[]) => any>(fn: T) {
 
 	return curried;
 }
+// sum(1, 2, 3) ----> sum(1)(2)(3)

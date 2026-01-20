@@ -16,7 +16,7 @@ export function get<T, U>(
 	const keys = path
 		?.replace(/\[(\d+)\]/, '.$1')
 		?.split('.')
-		.filter(Boolean);
+		?.filter(Boolean);
 
 	let result: any = target;
 

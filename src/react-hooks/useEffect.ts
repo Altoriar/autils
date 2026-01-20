@@ -18,7 +18,7 @@ export function useEffect(effect: () => void | (() => void), deps: any[]) {
 	if (hasChanged) {
 		setTimeout(() => {
 			effect();
-			hooks[currentIndex] = [deps];
+			hooks[currentIndex] = deps;
 		});
 	}
 

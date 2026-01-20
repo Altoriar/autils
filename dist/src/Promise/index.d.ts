@@ -1,16 +1,16 @@
 type Status = 'pending' | 'resolved' | 'rejected';
-export declare class MyPromise {
+export declare class MyPromise<T> {
     status: Status;
-    data: any;
+    data: T | undefined;
     callbacks: {
         onResolved: Function;
         onRejected: Function;
     }[];
     constructor(excutor: Function);
-    then(): void;
-    catch(): void;
-    static resolve(): void;
-    static reject(): void;
+    then(onResolved?: Function, onRejected?: Function): Promise<unknown>;
+    catch(onRejected: Function): void;
+    static resolve(value: any): Promise<unknown>;
+    static reject(reason: any): Promise<unknown>;
     static all(promises: Promise<unknown>[]): Promise<unknown>;
     static race(promises: Promise<any>[]): Promise<unknown>;
 }

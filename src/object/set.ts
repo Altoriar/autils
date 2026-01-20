@@ -1,4 +1,4 @@
-export function set<T, U>(target: T, path: string, value: U): T {
+export function set<T, U extends T>(target: T, path: string, value: U): T {
 	const keys = path
 		.replace(/\[(d+)]/g, '.$1')
 		.split('.')
@@ -11,6 +11,7 @@ export function set<T, U>(target: T, path: string, value: U): T {
 		const key = keys[i];
 		const isLastKey = isLastIndex === i;
 
+		// 不是最后一个 key 且 key 不存在
 		if (!isLastKey && !(key in reuslt)) {
 			reuslt[key] = /^\d+$/.test(key) ? [] : {};
 		}

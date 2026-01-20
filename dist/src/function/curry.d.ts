@@ -14,9 +14,9 @@
     // 测试1：基础场景（单参数分批传参）
         const add = (a: number, b: number, c: number) => a + b + c;
         const curriedAdd = curry(add);
-        console.log(curriedAdd(1)(2)(3)); // 6 ✅
-        console.log(curriedAdd(1, 2)(3)); // 6 ✅（分批传多个参数）
-        console.log(curriedAdd(1)(2, 3)); // 6 ✅
+        console.log(curriedAdd(1)(2)(3)); // 6
+        console.log(curriedAdd(1, 2)(3)); // 6 （分批传多个参数）
+        console.log(curriedAdd(1)(2, 3)); // 6
 
         // 测试2：绑定 this 场景（保留 this 指向）
         const obj = {
@@ -27,16 +27,16 @@
         };
         const curriedAddBase = curry(obj.addBase);
         const boundAddBase = curriedAddBase.bind(obj);
-        console.log(boundAddBase(5)(6)); // 10+5+6=21 ✅
+        console.log(boundAddBase(5)(6)); // 10+5+6=21
 
         // 测试3：无参数/单参数函数
         const noArgFn = () => "hello";
         const curriedNoArg = curry(noArgFn);
-        console.log(curriedNoArg()); // hello ✅
+        console.log(curriedNoArg()); // hello
 
         const singleArgFn = (a: string) => a.toUpperCase();
         const curriedSingle = curry(singleArgFn);
-        console.log(curriedSingle("test")); // TEST ✅
+        console.log(curriedSingle("test")); // TEST
  */
 export declare function curry<T extends (...args: any[]) => any>(fn: T): (this: any, ...args: any[]) => any;
 //# sourceMappingURL=curry.d.ts.map

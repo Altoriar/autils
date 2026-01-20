@@ -1,3 +1,11 @@
+## webpack 和 vite 的区别
+1. 核心思想不同
+   1. webpack是预构建型 Bundler
+   2. vite是即时服务型 Dev Server
+Webpack 是以 bundle 为中心的构建工具，开发时需要整体打包，所以启动慢、热更新慢，但生态成熟、适合复杂构建。
+Vite 利用浏览器原生 ESM，在开发环境不打包，按需编译，基于 esbuild，启动极快、HMR 极佳；生产使用 rollup。
+总结：Vite 开发体验强，Webpack 可定制能力强。
+
 ## boe 和 ppe 是如何区分环境
 
 
@@ -21,6 +29,31 @@ useState(3)
 
 
 ## 前端如何处理大文件上传
+核心思想：将大文件拆分成若干个小块（chunk），逐块上传，失败重传，最后合并
+```js
+function creatChunk(file, size = 1 * 1024 * 1024) {
+  const chunks = [];
+  let offset = 0;
+
+  while(offset < file.size) {
+    const blob = file.slice(offset, offset + size);
+    offset += size;
+  }
+
+  return  chunks;
+}
+```
+
+使用
+```js
+const chunks = createChunks(file, 2 * 1024 * 1024)
+
+const requests = chunk.map((chunk, index) => {
+  return fetch('xxxx', {hash: fileHash, index, chunk})
+})
+
+await Promise.all(requests)
+```
 
 ## 说说px rem em的区别 / 功能
 px像素：绝对单位，不会随着窗口的变化而发生改变

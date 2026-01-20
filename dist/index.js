@@ -27,36 +27,35 @@ class MyPromise {
     data = undefined;
     callbacks = []; // 结构 {onResolved() {}, onRejected() {}}
     constructor(excutor) {
-        const self = this;
-        self.status = 'pending';
-        self.data = undefined;
-        self.callbacks = [];
-        function resolve(value) {
-            if (self.status !== 'pending')
+        this.status = 'pending';
+        this.data = undefined;
+        this.callbacks = [];
+        const resolve = (value) => {
+            if (this.status !== 'pending')
                 return;
-            self.status = 'resolved';
-            self.data = value;
-            if (self.callbacks.length > 0) {
+            this.status = 'resolved';
+            this.data = value;
+            if (this.callbacks.length > 0) {
                 setTimeout(() => {
-                    self.callbacks.forEach((cb) => {
+                    this.callbacks.forEach((cb) => {
                         cb.onResolved(value);
                     });
                 });
             }
-        }
-        function reject(reason) {
+        };
+        const reject = (reason) => {
             if (self.status !== 'pending')
                 return;
-            self.status = 'rejected';
-            self.data = reason;
-            if (self.callbacks.length > 0) {
+            this.status = 'rejected';
+            this.data = reason;
+            if (this.callbacks.length > 0) {
                 setTimeout(() => {
-                    self.callbacks.forEach((cb) => {
+                    this.callbacks.forEach((cb) => {
                         cb.onRejected(reason);
                     });
                 });
             }
-        }
+        };
         try {
             excutor(resolve, reject);
         }
@@ -64,10 +63,69 @@ class MyPromise {
             reject(error);
         }
     }
-    then() { }
-    catch() { }
-    static resolve() { }
-    static reject() { }
+    then(onResolved, onRejected) {
+        onResolved =
+            typeof onResolved === 'function' ? onResolved : (value) => value;
+        onRejected =
+            typeof onRejected === 'function'
+                ? onRejected
+                : (reason) => {
+                    throw reason;
+                };
+        return new Promise((resolve, reject) => {
+            const handle = (callback) => {
+                // 回调函数抛出异常样
+                try {
+                    const result = callback(this.data);
+                    // 如果回调函数返回的是 Promise，则改变 Promise 的状态，否则将值返回
+                    if (result instanceof Promise) {
+                        result.then(resolve, reject);
+                    }
+                    else {
+                        resolve(result);
+                    }
+                }
+                catch (error) {
+                    reject(error);
+                }
+            };
+            if (this.status === 'pending') {
+                this.callbacks.push({
+                    onResolved(value) {
+                        handle(onResolved);
+                    },
+                    onRejected(value) {
+                        handle(onRejected);
+                    },
+                });
+            }
+            else if (this.status === 'resolved') {
+                setTimeout(() => {
+                    handle(onResolved);
+                });
+            }
+            else {
+                setTimeout(() => {
+                    handle(onRejected);
+                });
+            }
+        });
+    }
+    catch(onRejected) {
+        this.then(undefined, onRejected);
+    }
+    static resolve(value) {
+        return new Promise((resolve, reject) => {
+            if (value instanceof Promise) {
+                value.then(resolve, reject);
+            }
+        });
+    }
+    static reject(reason) {
+        return new Promise((resolve, reject) => {
+            reject(reason);
+        });
+    }
     // Promise.all([fetch(), fetch()])
     /* Promise函数对象all方法，接收promise数组，只有所有promise对象成功返回成功，否则返回失败 */
     static all(promises) {
@@ -390,8 +448,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 function flatten(arr, depth = Infinity) {
     return arr.reduce((pre, next) => {
-        if (Array.isArray(next)) {
-            pre.push(...flatten(next));
+        if (Array.isArray(next) && depth > 0) {
+            pre.push(...flatten(next, depth - 1));
         }
         else {
             pre.push(next);
@@ -399,6 +457,16 @@ function flatten(arr, depth = Infinity) {
         return pre;
     }, []);
 }
+// export function flatten<T>(arr: any[], depth = Infinity): T[] {
+// 	return arr.reduce<T[]>((pre, next) => {
+// 		if (Array.isArray(next) && depth > 0) {
+// 			pre.push(...flatten(next, depth - 1));
+// 		} else {
+// 			pre.push(next);
+// 		}
+// 		return pre;
+// 	}, []);
+// }
 
 
 /***/ }),
@@ -809,6 +877,274 @@ function isUndefined(value) {
 
 /***/ }),
 
+/***/ "./src/da/LinkedList.ts":
+/*!******************************!*\
+  !*** ./src/da/LinkedList.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LinkedList: () => (/* binding */ LinkedList)
+/* harmony export */ });
+/**
+ * 链表
+ * 查看节点个数：size
+ * 判断链表是否为空：isEmpty
+ * 追加节点：append
+ * 在指定位置插入节点：insert
+ * 删除指定位置的节点：removeAt
+ * 查看指定位置的节点：get
+ * 删除指定值节点：remove
+ * 链表转数组：toArray
+ */
+class ListNode {
+    value;
+    next;
+    constructor(value) {
+        this.value = value;
+        this.next = null;
+    }
+}
+class LinkedList {
+    head = null;
+    length = 0;
+    size() {
+        return this.length;
+    }
+    isEmpty() {
+        return this.length === 0;
+    }
+    // 追加节点
+    append(value) {
+        const node = new ListNode(value);
+        if (!this.head) {
+            this.head = node;
+        }
+        else {
+            let current = this.head;
+            while (current.next) {
+                current = current.next;
+            }
+            current.next = node;
+        }
+        this.length++;
+    }
+    // 在指定位置插入节点
+    insert(index, value) {
+        if (index < 0 || index > this.length)
+            return false;
+        const node = new ListNode(value);
+        // 头部插入
+        if (index === 0) {
+            node.next = this.head;
+            this.head = node;
+        }
+        else {
+            let current = this.head;
+            let prev = null;
+            let i = 0;
+            while (i++ < index) {
+                prev = current;
+                current = current.next;
+            }
+            node.next = current;
+            prev.next = node;
+        }
+        this.length++;
+        return true;
+    }
+    // 获取指定元素
+    get(index) {
+        if (index < 0 || index > this.length)
+            return null;
+        let current = this.head;
+        let i = 0;
+        while (i++ < index) {
+            current = current.next;
+        }
+        return current.value;
+    }
+    // 查找某一个元素的索引，不存在则返回 -1
+    indexOf(value) {
+        let current = this.head;
+        let index = 0;
+        while (current) {
+            if (current.value === value)
+                return index;
+            current = current.next;
+            index++;
+        }
+        return -1;
+    }
+    // 删除指定位置的节点
+    removeAt(index) {
+        if (index < 0 || index > this.length)
+            return null;
+        let current = this.head;
+        let prev = null;
+        // 头部特殊处理
+        if (index === 0) {
+            this.head = current.next;
+        }
+        else {
+            let i = 0;
+            while (i++ < index) {
+                prev = current;
+                current = current.next;
+            }
+            prev.next = current.next;
+        }
+        this.length--;
+        return current.value;
+    }
+    // 删除指定值节点
+    remove(value) {
+        const index = this.indexOf(value);
+        if (index === -1)
+            return false;
+        return this.removeAt(index) !== null;
+    }
+    // 链表转数组，方便操作
+    toArray() {
+        const result = [];
+        let current = this.head;
+        while (current) {
+            result.push(current.value);
+            current = current.next;
+        }
+        return result;
+    }
+    toString() {
+        const array = this.toArray();
+        let result = '';
+        array.forEach((item, index) => {
+            result += `${item}${index === array.length - 1 ? '' : ','}`;
+        });
+        return result;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/da/Queue.ts":
+/*!*************************!*\
+  !*** ./src/da/Queue.ts ***!
+  \*************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Queue: () => (/* binding */ Queue)
+/* harmony export */ });
+/**
+ * 队列
+ * 入队: enqueue(item: T): void
+ * 出队: dequeue(item: T): T | undefined
+ * 查看队头: peek(): T
+ * 查看元素个数: size(): number
+ * 判断队列是否为空: isEmpty(): boolean
+ */
+class Queue {
+    items = [];
+    constructor() {
+        this.items = [];
+    }
+    // 添加元素
+    enqueue(item) {
+        this.items.push(item);
+    }
+    // 删除元素
+    dequeue() {
+        const removed = this.items.pop();
+        return removed;
+    }
+    // 查看队头
+    peek() {
+        return this.items[0];
+    }
+    size() {
+        return this.items.length;
+    }
+    isEmpty() {
+        return this.items.length === 0;
+    }
+    clear() {
+        this.items = [];
+    }
+    toString() {
+        if (this.isEmpty()) {
+            return '';
+        }
+        let str = '';
+        this.items.forEach((item, index) => {
+            str += `${item} -> ${index}，`;
+        });
+        return str;
+    }
+}
+
+
+/***/ }),
+
+/***/ "./src/da/Stack.ts":
+/*!*************************!*\
+  !*** ./src/da/Stack.ts ***!
+  \*************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Stack: () => (/* binding */ Stack)
+/* harmony export */ });
+/**
+ * 栈
+ * 入栈：push
+ * 出栈：pop
+ * 查看栈顶：peek
+ * 返回栈长度：size
+ * 判断栈是否为空：isEmpty
+ */
+class Stack {
+    items = [];
+    constructor() {
+        this.items = [];
+    }
+    // 入栈
+    push(item) {
+        this.items.push(item);
+    }
+    // 出栈
+    pop() {
+        return this.items.pop();
+    }
+    // 查看栈顶
+    peek() {
+        return this.items[this.items.length - 1];
+    }
+    // 返回栈长度
+    size() {
+        return this.items.length;
+    }
+    // 判断栈是否为空
+    isEmpty() {
+        return this.items.length === 0;
+    }
+    toString() {
+        if (this.isEmpty())
+            return '';
+        let reuslt = '';
+        for (let i = 0; i < this.items.length; i++) {
+            reuslt += `${this.items[i]} -> ${i}，`;
+        }
+        return reuslt;
+    }
+}
+
+
+/***/ }),
+
 /***/ "./src/function/apply.ts":
 /*!*******************************!*\
   !*** ./src/function/apply.ts ***!
@@ -906,9 +1242,9 @@ __webpack_require__.r(__webpack_exports__);
     // 测试1：基础场景（单参数分批传参）
         const add = (a: number, b: number, c: number) => a + b + c;
         const curriedAdd = curry(add);
-        console.log(curriedAdd(1)(2)(3)); // 6 ✅
-        console.log(curriedAdd(1, 2)(3)); // 6 ✅（分批传多个参数）
-        console.log(curriedAdd(1)(2, 3)); // 6 ✅
+        console.log(curriedAdd(1)(2)(3)); // 6
+        console.log(curriedAdd(1, 2)(3)); // 6 （分批传多个参数）
+        console.log(curriedAdd(1)(2, 3)); // 6
 
         // 测试2：绑定 this 场景（保留 this 指向）
         const obj = {
@@ -919,23 +1255,23 @@ __webpack_require__.r(__webpack_exports__);
         };
         const curriedAddBase = curry(obj.addBase);
         const boundAddBase = curriedAddBase.bind(obj);
-        console.log(boundAddBase(5)(6)); // 10+5+6=21 ✅
+        console.log(boundAddBase(5)(6)); // 10+5+6=21
 
         // 测试3：无参数/单参数函数
         const noArgFn = () => "hello";
         const curriedNoArg = curry(noArgFn);
-        console.log(curriedNoArg()); // hello ✅
+        console.log(curriedNoArg()); // hello
 
         const singleArgFn = (a: string) => a.toUpperCase();
         const curriedSingle = curry(singleArgFn);
-        console.log(curriedSingle("test")); // TEST ✅
+        console.log(curriedSingle("test")); // TEST
  */
 function curry(fn) {
     // 获取原函数的形参个数（基于 Function.length）
     const fnArgLength = fn.length;
     // 递归接收参数的核心函数
     const curried = function collected(...args) {
-        // 场景1：已传入的参数个数 ≥ 原函数形参个数 → 执行原函数
+        // 场景1：已传入的参数个数 ≥ 原函数形参个数 -> 执行原函数
         if (args.length >= fnArgLength) {
             return fn.apply(this, args);
         }
@@ -2259,7 +2595,10 @@ var __webpack_exports__ = {};
   \**********************/
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   MyPromise: () => (/* reexport safe */ _Promise__WEBPACK_IMPORTED_MODULE_69__.MyPromise),
+/* harmony export */   LinkedList: () => (/* reexport safe */ _da_LinkedList__WEBPACK_IMPORTED_MODULE_71__.LinkedList),
+/* harmony export */   MyPromise: () => (/* reexport safe */ _Promise__WEBPACK_IMPORTED_MODULE_72__.MyPromise),
+/* harmony export */   Queue: () => (/* reexport safe */ _da_Queue__WEBPACK_IMPORTED_MODULE_69__.Queue),
+/* harmony export */   Stack: () => (/* reexport safe */ _da_Stack__WEBPACK_IMPORTED_MODULE_70__.Stack),
 /* harmony export */   ajax: () => (/* reexport safe */ _ajax__WEBPACK_IMPORTED_MODULE_68__.ajax),
 /* harmony export */   apply: () => (/* reexport safe */ _function_apply__WEBPACK_IMPORTED_MODULE_24__.apply),
 /* harmony export */   bind: () => (/* reexport safe */ _function_bind__WEBPACK_IMPORTED_MODULE_26__.bind),
@@ -2314,7 +2653,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   parseUrlParams: () => (/* reexport safe */ _string_parseUrlParams__WEBPACK_IMPORTED_MODULE_53__.parseUrlParams),
 /* harmony export */   pick: () => (/* reexport safe */ _object_pick__WEBPACK_IMPORTED_MODULE_40__.pick),
 /* harmony export */   plindrome: () => (/* reexport safe */ _string_plindrome__WEBPACK_IMPORTED_MODULE_54__.plindrome),
-/* harmony export */   pubsub: () => (/* reexport safe */ _PubSub__WEBPACK_IMPORTED_MODULE_70__.pubsub),
+/* harmony export */   pubsub: () => (/* reexport safe */ _PubSub__WEBPACK_IMPORTED_MODULE_73__.pubsub),
 /* harmony export */   pull: () => (/* reexport safe */ _array_pull__WEBPACK_IMPORTED_MODULE_21__.pull),
 /* harmony export */   random: () => (/* reexport safe */ _tools_random__WEBPACK_IMPORTED_MODULE_61__.random),
 /* harmony export */   range: () => (/* reexport safe */ _tools_range__WEBPACK_IMPORTED_MODULE_62__.range),
@@ -2402,8 +2741,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _react_hooks_useContext__WEBPACK_IMPORTED_MODULE_66__ = __webpack_require__(/*! ./react-hooks/useContext */ "./src/react-hooks/useContext.tsx");
 /* harmony import */ var _react_hooks_useRequest__WEBPACK_IMPORTED_MODULE_67__ = __webpack_require__(/*! ./react-hooks/useRequest */ "./src/react-hooks/useRequest.ts");
 /* harmony import */ var _ajax__WEBPACK_IMPORTED_MODULE_68__ = __webpack_require__(/*! ./ajax */ "./src/ajax/index.ts");
-/* harmony import */ var _Promise__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ./Promise */ "./src/Promise/index.ts");
-/* harmony import */ var _PubSub__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ./PubSub */ "./src/PubSub/index.ts");
+/* harmony import */ var _da_Queue__WEBPACK_IMPORTED_MODULE_69__ = __webpack_require__(/*! ./da/Queue */ "./src/da/Queue.ts");
+/* harmony import */ var _da_Stack__WEBPACK_IMPORTED_MODULE_70__ = __webpack_require__(/*! ./da/Stack */ "./src/da/Stack.ts");
+/* harmony import */ var _da_LinkedList__WEBPACK_IMPORTED_MODULE_71__ = __webpack_require__(/*! ./da/LinkedList */ "./src/da/LinkedList.ts");
+/* harmony import */ var _Promise__WEBPACK_IMPORTED_MODULE_72__ = __webpack_require__(/*! ./Promise */ "./src/Promise/index.ts");
+/* harmony import */ var _PubSub__WEBPACK_IMPORTED_MODULE_73__ = __webpack_require__(/*! ./PubSub */ "./src/PubSub/index.ts");
 /* Base */
 
 
@@ -2484,6 +2826,9 @@ __webpack_require__.r(__webpack_exports__);
 /* lazyload */
 /* 页面倒计时 */
 /* 数据结构 & 算法 */
+
+
+
 /* Promise */
 
 /* 发布订阅 */
@@ -2505,6 +2850,7 @@ __webpack_require__.r(__webpack_exports__);
 /* lazyload */
 /* 页面倒计时 */
 /* 数据结构 & 算法 */
+
 /* Promise */
 
 /* Ajax */

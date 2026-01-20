@@ -67,6 +67,9 @@ import { useEffect } from './react-hooks/useEffect';
 import { createContext } from './react-hooks/useContext';
 import { useRequest } from './react-hooks/useRequest';
 import { ajax } from './ajax';
+import { Queue } from './da/Queue';
+import { Stack } from './da/Stack';
+import { LinkedList } from './da/LinkedList';
 import { MyPromise } from './Promise';
 import { pubsub } from './PubSub';
 export { isArray, isBoolean, isEmpty, isFunction, isNull, isNumber, isObject, isString, isUndefined, };
@@ -76,6 +79,7 @@ export { clone, cloneDeep, entries, get, has, keys, newInstance, omit, pick, set
 export { camelCase, endWith, kebabCase, padEnd, padStart, snakeCase, startWith, reverseStr, capitalize, capitalizeWords, countChars, parseUrlParams, trim, truncate, isAnagram, maxCountChar, plindrome, };
 export { delay, random, range, uniqueId };
 export { useState, useEffect, createContext, useRequest };
+export { Queue, Stack, LinkedList };
 export { MyPromise };
 export { ajax };
 export { pubsub };
