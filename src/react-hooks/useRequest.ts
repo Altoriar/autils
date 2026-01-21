@@ -7,16 +7,24 @@ interface RequestConfig extends Request {
 	data: Record<string, any>;
 }
 
-export function useRequest(config: RequestConfig) {
+export function useRequest<T extends unknown = undefined>(
+	config: RequestConfig,
+): {
+	loading: boolean;
+	error: string;
+	data: T | undefined;
+	refresh: () => Promise<void>;
+} {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState('');
-	const [data, setData] = useState();
+	const [data, setData] = useState<T>();
 
 	const fetchData = async () => {
 		setLoading(true);
 		try {
 			const res = await fetch(config);
-			setData(res as unknown as any);
+			const data = await res.json();
+			setData(data);
 		} catch (e) {
 			setError(e as string);
 		} finally {

@@ -2,11 +2,11 @@
  * 封装 localStorage 对象，简化操作
  */
 export const storage = {
-	get<T>(key: string): T | null {
+	get<T = unknown>(key: string): T | null {
 		return JSON.parse(localStorage.getItem(key) || 'null');
 	},
 
-	set<T>(key: string, value: T): void {
+	set<T = unknown>(key: string, value: T): void {
 		localStorage.setItem(key, JSON.stringify(value || '[]'));
 	},
 

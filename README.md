@@ -129,7 +129,12 @@
 10. 二叉搜索树 BinarySearchTree
 11. 图 Graph
 
-# 算法（暂未实现）
+# 数据结构操作
+### 链表操作
+1. mergeTowLists: 合并两个有序链表
+2. reverseLinkedList: 反转链表
+
+# 算法（已实现冒泡、计数）
 1. 冒泡排序 bubbleSort
 2. 选择排序 selectionSort
 3. *插入排序 insertionSort

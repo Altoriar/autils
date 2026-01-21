@@ -1,19 +1,25 @@
-class PubSub {
-	channels: Record<string, Function[]> = {};
+type Callback<Args extends any[] = any[], R = void> = (...args: Args) => R;
 
-	on(key: string, callback: Function) {
-		if (!this.channels.key) {
+type EventMap = Record<string, any[]>;
+
+class PubSub<E extends EventMap = {}> {
+	private channels: {
+		[K in keyof E]?: Callback<E[K]>[];
+	} = {};
+
+	on<K extends keyof E>(key: K, callback: Callback<E[K]>) {
+		if (!this.channels[key]) {
 			this.channels[key] = [callback];
 		} else {
 			this.channels[key]?.push(callback);
 		}
 	}
 
-	emit(key: string, ...args: any[]) {
-		this.channels[key]?.forEach((cb) => cb(args));
+	emit<K extends keyof E>(key: K, ...args: E[K]) {
+		this.channels[key]?.forEach((cb) => cb(...args));
 	}
 
-	off(key: string) {
+	off<K extends keyof E>(key: K) {
 		this.channels[key] = [];
 	}
 
@@ -21,5 +27,3 @@ class PubSub {
 		this.channels = {};
 	}
 }
-
-export const pubsub = new PubSub();

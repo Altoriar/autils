@@ -10,17 +10,17 @@
  * 链表转数组：toArray
  */
 
-class ListNode<T> {
+export class ListNode<T = any> {
 	value: T;
 	next: ListNode<T> | null;
 
-	constructor(value: T) {
+	constructor(value: T, next: ListNode<T> | null = null) {
 		this.value = value;
-		this.next = null;
+		this.next = next;
 	}
 }
 
-export class LinkedList<T> {
+export class LinkedList<T = any> {
 	private head: ListNode<T> | null = null;
 	private length: number = 0;
 

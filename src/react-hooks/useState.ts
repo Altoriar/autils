@@ -1,7 +1,7 @@
 let hooks: any[] = [];
 let hookIndex = 0;
 
-export function useState<T>(initialValue: T) {
+export function useState<T extends unknown>(initialValue: T) {
 	// 取当前下标
 	const currentIndex = hookIndex;
 

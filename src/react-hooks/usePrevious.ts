@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
  * @param value 
  * @returns 
  */
-export const usePrevious = <T>(value: T): T | undefined => {
+export const usePrevious = <T = unknown>(value: T): T | undefined => {
 	const ref = useRef<T | undefined>(undefined);
 
 	useEffect(() => {
